@@ -61,13 +61,7 @@ public class Game {
 				isGettingOutOfPenaltyBox = true;
 				
 				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-				
-				System.out.println(players.get(currentPlayer) 
-						+ "'s new location is " 
-						+ places[currentPlayer]);
-				System.out.println("The category is " + currentCategory());
+				updatePlayerPlace(roll);
 				askQuestion();
 			} else {
 				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
@@ -75,21 +69,25 @@ public class Game {
 				}
 			
 		} else {
-		
-			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-			
-			System.out.println(players.get(currentPlayer) 
-					+ "'s new location is " 
-					+ places[currentPlayer]);
-			System.out.println("The category is " + currentCategory());
+
+			updatePlayerPlace(roll);
 			askQuestion();
 		}
 		
 	}
 
+	private void updatePlayerPlace(int roll) {
+		places[currentPlayer] = places[currentPlayer] + roll;
+		if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+
+		System.out.println(players.get(currentPlayer)
+				+ "'s new location is "
+				+ places[currentPlayer]);
+		System.out.println("The category is " + currentCategory().category);
+	}
+
 	private void askQuestion() {
-		switch (QuestionCategories.valueOf(currentCategory()) ) {
+		switch (currentCategory()) {
 			case QuestionCategories.POP:
 				System.out.println(popQuestions.removeFirst());
 				break;
@@ -106,14 +104,14 @@ public class Game {
 	}
 	
 	
-	private String currentCategory() {
+	private QuestionCategories currentCategory() {
 		if(List.of(0,4,8).contains(places[currentPlayer]))
-			return QuestionCategories.POP.category;
+			return QuestionCategories.POP;
 		else if(List.of(1,5,9).contains(places[currentPlayer]))
-			return QuestionCategories.SCIENCE.category;
+			return QuestionCategories.SCIENCE;
 		else if(List.of(2,6,10).contains(places[currentPlayer]))
-			return QuestionCategories.SPORTS.category;
-		return QuestionCategories.ROCK.category;
+			return QuestionCategories.SPORTS;
+		return QuestionCategories.ROCK;
 	}
 
 	public boolean wasCorrectlyAnswered() {
@@ -136,9 +134,6 @@ public class Game {
 				if (currentPlayer == players.size()) currentPlayer = 0;
 				return true;
 			}
-			
-			
-			
 		} else {
 		
 			System.out.println("Answer was corrent!!!!");
@@ -168,6 +163,6 @@ public class Game {
 
 
 	private boolean didPlayerWin() {
-		return !(purses[currentPlayer] == 6);
+		return (purses[currentPlayer] != 6);
 	}
 }
