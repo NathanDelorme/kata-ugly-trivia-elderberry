@@ -2,6 +2,7 @@ package info.dmerej;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Game {
     ArrayList players = new ArrayList();
@@ -88,28 +89,31 @@ public class Game {
 	}
 
 	private void askQuestion() {
-		if (currentCategory() == "Pop")
-			System.out.println(popQuestions.removeFirst());
-		if (currentCategory() == "Science")
-			System.out.println(scienceQuestions.removeFirst());
-		if (currentCategory() == "Sports")
-			System.out.println(sportsQuestions.removeFirst());
-		if (currentCategory() == "Rock")
-			System.out.println(rockQuestions.removeFirst());		
+		switch (QuestionCategories.valueOf(currentCategory()) ) {
+			case QuestionCategories.POP:
+				System.out.println(popQuestions.removeFirst());
+				break;
+			case QuestionCategories.SCIENCE:
+				System.out.println(scienceQuestions.removeFirst());
+				break;
+			case QuestionCategories.SPORTS:
+				System.out.println(sportsQuestions.removeFirst());
+				break;
+			case QuestionCategories.ROCK:
+				System.out.println(rockQuestions.removeFirst());
+				break;
+		}
 	}
 	
 	
 	private String currentCategory() {
-		if (places[currentPlayer] == 0) return "Pop";
-		if (places[currentPlayer] == 4) return "Pop";
-		if (places[currentPlayer] == 8) return "Pop";
-		if (places[currentPlayer] == 1) return "Science";
-		if (places[currentPlayer] == 5) return "Science";
-		if (places[currentPlayer] == 9) return "Science";
-		if (places[currentPlayer] == 2) return "Sports";
-		if (places[currentPlayer] == 6) return "Sports";
-		if (places[currentPlayer] == 10) return "Sports";
-		return "Rock";
+		if(List.of(0,4,8).contains(places[currentPlayer]))
+			return QuestionCategories.POP.category;
+		else if(List.of(1,5,9).contains(places[currentPlayer]))
+			return QuestionCategories.SCIENCE.category;
+		else if(List.of(2,6,10).contains(places[currentPlayer]))
+			return QuestionCategories.SPORTS.category;
+		return QuestionCategories.ROCK.category;
 	}
 
 	public boolean wasCorrectlyAnswered() {
